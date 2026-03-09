@@ -1,0 +1,71 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-9.0.2, pluggy-1.6.0 -- /opt/anaconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/liuruyi/code/python_code/CS336/assignment_1/assignment1-basics
+configfile: pyproject.toml
+plugins: anyio-4.12.0, jaxtyping-0.3.9
+collecting ... collected 1 item
+
+tests/test_model.py::test_transformer_block FAILED
+
+=================================== FAILURES ===================================
+____________________________ test_transformer_block ____________________________
+
+numpy_snapshot = <tests.conftest.NumpySnapshot object at 0x138daf140>
+ts_state_dict = ({'layers.0.attn.k_proj.weight': tensor([[ 0.0890,  0.1049,  0.0980,  ...,  0.1314,  0.0594, -0.0206],
+        [ 0.027...7,  ...,  0.0380, -0.0240,  0.1170]]), ...}, {'context_length': 16, 'd_ff': 128, 'd_model': 64, 'ffn_type': None, ...})
+in_embeddings = tensor([[[-0.9414,  1.2632, -0.1838,  ..., -0.1941,  0.0048, -1.3165],
+         [ 0.0204, -0.1652,  0.2109,  ...,  0.6...73, -0.5486,  ...,  1.5676, -1.1472, -1.5822],
+         [ 1.5936, -0.4113,  0.6037,  ..., -0.6494,  1.2858,  0.4321]]])
+d_model = 64, n_heads = 4, d_ff = 128, n_keys = 16, theta = 10000.0
+
+    def test_transformer_block(numpy_snapshot, ts_state_dict, in_embeddings, d_model, n_heads, d_ff, n_keys, theta):
+        block_weights = {k.replace("layers.0.", ""): v for k, v in ts_state_dict[0].items() if "layers.0." in k}
+    
+        actual_output = run_transformer_block(
+            d_model=d_model,
+            num_heads=n_heads,
+            d_ff=d_ff,
+            max_seq_len=n_keys,
+            theta=theta,
+            weights=block_weights,
+            in_features=in_embeddings,
+        )
+>       numpy_snapshot.assert_match(
+            actual_output,
+            atol=1e-6,
+        )
+
+tests/test_model.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/conftest.py:89: in assert_match
+    np.testing.assert_allclose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<function assert_allclose.<locals>.compare at 0x13ac8ce00>, array([[[-4.7587872e-02,  9.1581762e-01, -7.8642017e-01, ...        [ 3.3387089 , -3.2790358 ,  2.0437074 , ..., -0.53551453,
+         -1.1724211 , -1.0874158 ]]], dtype=float32))
+kwds = {'equal_nan': True, 'err_msg': "Array 'array' does not match snapshot for test_transformer_block", 'header': 'Not equal to tolerance rtol=0.0001, atol=1e-06', 'verbose': True}
+
+    @wraps(func)
+    def inner(*args, **kwds):
+        with self._recreate_cm():
+>           return func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E           AssertionError: 
+E           Not equal to tolerance rtol=0.0001, atol=1e-06
+E           Array 'array' does not match snapshot for test_transformer_block
+E           Mismatched elements: 2817 / 3072 (91.7%)
+E           Max absolute difference: 0.8919261
+E           Max relative difference: 742.2789
+E            x: array([[[-4.758787e-02,  9.158176e-01, -7.864202e-01, ...,
+E                     5.728894e-01, -6.556644e-01, -1.055571e+00],
+E                   [ 1.346489e-01,  6.789716e-01,  9.083860e-01, ...,...
+E            y: array([[[ 0.058669,  1.071683, -0.696938, ...,  0.028006, -0.862122,
+E                    -1.230627],
+E                   [ 0.327779,  0.794286,  0.713358, ..., -0.528555, -0.273695,...
+
+/opt/anaconda3/lib/python3.12/contextlib.py:81: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_model.py::test_transformer_block - AssertionError: 
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+============================== 1 failed in 0.09s ===============================
