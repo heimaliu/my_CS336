@@ -1,0 +1,43 @@
+# TinyStories CPU 快速测试配置文件 (Smoke Test)
+train_path: "data/TinyStoriesV2-GPT4-train.txt"
+valid_path: "data/TinyStoriesV2-GPT4-valid.txt"
+work_dir: "runs/smoke_test"
+
+# 数据处理 - 最小化
+max_train_chars: 50000
+max_valid_chars: 10000
+vocab_size: 2000
+
+# 模型架构 - 极小模型，CPU 友好
+context_length: 32
+d_model: 64
+num_layers: 1
+num_heads: 2
+d_ff: 128
+rope_theta: 10000.0
+
+# 训练超参数 - 极高频率打点，快速观察图表
+max_steps: 100
+batch_size: 4
+eval_interval: 20
+eval_steps: 5
+log_interval: 2
+
+# 学习率与调度
+max_lr: 0.0005
+min_lr: 0.0001
+warmup_iters: 10
+
+# 优化器
+weight_decay: 0.1
+adam_beta1: 0.9
+adam_beta2: 0.95
+eps: 0.00000001
+
+# 梯度裁剪
+grad_clip: 1.0
+
+# Weights & Biases
+wandb_enabled: true
+wandb_project: "cs336_smoke_test"
+wandb_run_name: "cpu_smoke_test_01"
