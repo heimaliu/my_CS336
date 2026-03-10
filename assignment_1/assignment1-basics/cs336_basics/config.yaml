@@ -1,0 +1,43 @@
+# TinyStories 训练配置文件
+train_path: "data/TinyStoriesV2-GPT4-train.txt"
+valid_path: "data/TinyStoriesV2-GPT4-valid.txt"
+work_dir: "runs/tinystories_v1"
+
+# 数据处理
+max_train_chars: 2000000
+max_valid_chars: 400000
+vocab_size: 10000
+
+# 模型架构
+context_length: 256
+d_model: 512
+d_ff: 1344
+num_layers: 4
+num_heads: 16
+rope_theta: 10000.0
+
+# 训练超参数
+batch_size: 64
+max_steps: 2000
+eval_interval: 200
+eval_steps: 20
+log_interval: 20
+
+# 学习率与调度
+max_lr: 0.00003
+min_lr: 0.00001
+warmup_iters: 100
+
+# 优化器
+weight_decay: 0.1
+adam_beta1: 0.9
+adam_beta2: 0.95
+eps: 0.00000001
+
+# 梯度裁剪
+grad_clip: 1.0
+
+# Weights & Biases
+wandb_enabled: true
+wandb_project: "cs336_final_train"
+wandb_run_name: "tinystories_17M_like"
